@@ -21,6 +21,16 @@ const loginSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  image: {
+    type: String,
+    default:
+      "https://res.cloudinary.com/dpbsogbtr/image/upload/v1704950539/hgmdbrneq6vaifstxmht.png",
+  },
+  gender: String,
+  address: String,
+  city: String,
+  state: String,
+  pincode: String,
 });
 
 const Login = mongoose.model("Users", loginSchema);

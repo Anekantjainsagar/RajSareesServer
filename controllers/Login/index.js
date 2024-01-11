@@ -120,8 +120,12 @@ exports.getUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   const { id } = req;
-  let { name, email, phone } = req.body;
+  let { name, email, phone, gender, address, city, state, pincode, image } =
+    req.body;
 
-  const response = await Login.updateOne({ _id: id }, { name, email, phone });
+  const response = await Login.updateOne(
+    { _id: id },
+    { name, email, phone, gender, address, city, state, pincode, image }
+  );
   res.status(200).send(response);
 };
