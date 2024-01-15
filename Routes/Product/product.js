@@ -4,23 +4,32 @@ const Product = require("../../model/productSchema");
 
 product.get("/get-all", async (req, res) => {
   try {
-    const result = await Product.find().populate("category_id");
+    const { categoryIds } = req.query;
+
+    let filter = {};
+    if (categoryIds) {
+      const categoryIdArray = categoryIds.split(",");
+      filter = { category_id: { $in: categoryIdArray } };
+    }
+
+    const result = await Product.find(filter).populate("category_id");
     res.status(200).send(result);
   } catch (error) {
+    console.log(error);
     res.send(error);
   }
 });
 
 product.post("/add", async (req, res) => {
   try {
-    let { category_id, title, price, discountPrice, description, images } =
+    let { category_id, name, price, discountPrice, description, images } =
       req.body;
     price = parseInt(price);
     discountPrice = parseInt(discountPrice);
 
     const product = Product({
       category_id,
-      title,
+      name,
       price,
       discountPrice,
       description,
@@ -36,6 +45,40 @@ product.post("/add", async (req, res) => {
       });
   } catch (error) {
     res.send(error);
+  }
+});
+
+product.post("/update/:id", async (req, res) => {
+  let { category_id, name, price, discountPrice, description, images } =
+    req.body;
+  price = parseInt(price);
+  discountPrice = parseInt(discountPrice);
+
+  const { id } = req.params;
+
+  const response = await Product.updateOne(
+    { _id: id },
+    { category_id, name, price, discountPrice, description, images }
+  );
+  res.send(response);
+});
+
+product.post("/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(req.params);
+
+  try {
+    const result = await Product.deleteOne({ _id: id });
+
+    // Check if the delete operation was successful
+    if (result.deletedCount > 0) {
+      res.send({ success: true, message: "Product deleted successfully" });
+    } else {
+      res.status(404).send({ success: false, message: "Product not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ success: false, message: "Internal Server Error" });
   }
 });
 

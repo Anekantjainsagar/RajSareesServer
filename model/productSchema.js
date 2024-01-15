@@ -2,11 +2,16 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
   category_id: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
-  title: String,
+  name: String,
   price: Number,
   discountPrice: Number,
   description: String,
   images: Array,
+  category: String,
+  date: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const Product = mongoose.model("Product", productSchema);
