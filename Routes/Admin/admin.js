@@ -3,6 +3,7 @@ const admin = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require("../../model/adminSchema");
+const Login = require("../../model/loginSchema");
 
 admin.post(`/add`, async (req, res) => {
   let { email, password } = req.body;
@@ -41,6 +42,11 @@ admin.post(`/add`, async (req, res) => {
         res.status(500).send("Internal server error");
       });
   }
+});
+
+admin.get("/get-users", async (req, res) => {
+  const data = await Login.find();
+  res.send(data);
 });
 
 module.exports = admin;
