@@ -11,7 +11,7 @@ product.get("/get-all", async (req, res) => {
   }
 });
 
-product.post("/add-new", async (req, res) => {
+product.post("/add", async (req, res) => {
   try {
     let { category_id, title, price, discountPrice, description, images } =
       req.body;

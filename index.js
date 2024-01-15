@@ -7,6 +7,7 @@ const connect = require("./db/conn");
 const login = require("./Routes/User/login");
 const product = require("./Routes/Product/product");
 const category = require("./Routes/Product/category");
+const admin = require("./Routes/Admin/admin");
 
 const https = require("https");
 const fs = require("fs");
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
+app.use("/api/admin", admin);
 app.use("/api/user", login);
 app.use("/api/product", product);
 app.use("/api/category", category);
