@@ -65,7 +65,6 @@ product.post("/update/:id", async (req, res) => {
 
 product.post("/delete/:id", async (req, res) => {
   const { id } = req.params;
-  console.log(req.params);
 
   try {
     const result = await Product.deleteOne({ _id: id });
@@ -80,6 +79,26 @@ product.post("/delete/:id", async (req, res) => {
     console.error(error);
     res.status(500).send({ success: false, message: "Internal Server Error" });
   }
+});
+
+product.post("/featured/:id", async (req, res) => {
+  const { id } = req.params;
+
+  let count = await Product.find({ featured: true });
+  count = count.length;
+  if (count < 4) {
+    const response = await Product.updateOne({ _id: id }, { featured: true });
+    res.send(response);
+  } else {
+    res.status(202).send("Remove prodcuts from featured");
+  }
+});
+
+product.post("/remove-featured/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const response = await Product.updateOne({ _id: id }, { featured: false });
+  res.send(response);
 });
 
 module.exports = product;
