@@ -95,7 +95,7 @@ exports.signInUser = async (req, res) => {
 exports.getUser = async (req, res) => {
   const { id } = req;
 
-  let user = await Login.findById(id);
+  let user = await Login.findById(id).populate("wishlist");
   res.send(user);
 };
 

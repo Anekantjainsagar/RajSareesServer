@@ -1,6 +1,9 @@
 const express = require("express");
 const product = express.Router();
 const Product = require("../../model/productSchema");
+const Login = require("../../model/loginSchema");
+
+const { validateSingin } = require("../../middlewares/auth");
 
 product.get("/get-all", async (req, res) => {
   try {
@@ -100,5 +103,45 @@ product.post("/remove-featured/:id", async (req, res) => {
   const response = await Product.updateOne({ _id: id }, { featured: false });
   res.send(response);
 });
+
+product.post(
+  "/add-to-wishlist/:product_id",
+  validateSingin,
+  async (req, res) => {
+    const { id } = req;
+    const { product_id } = req.params;
+
+    try {
+      const response = await Login.updateOne(
+        { _id: id },
+        { $push: { wishlist: product_id } }
+      );
+      res.send(response);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
+
+product.post(
+  "/remove-from-wishlist/:product_id",
+  validateSingin,
+  async (req, res) => {
+    const { id } = req;
+    const { product_id } = req.params;
+
+    try {
+      const response = await Login.updateOne(
+        { _id: id },
+        { $pull: { wishlist: product_id } }
+      );
+      res.send(response);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
 
 module.exports = product;

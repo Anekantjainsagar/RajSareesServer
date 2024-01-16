@@ -31,7 +31,7 @@ const loginSchema = new mongoose.Schema({
   city: String,
   state: String,
   pincode: String,
-  wishlist: Array,
+  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 });
 
 const Login = mongoose.model("Users", loginSchema);
