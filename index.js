@@ -18,16 +18,16 @@ app.use(cors());
 app.use(express.json());
 
 const port = process.env.PORT || 5000;
-// const options = {
-//   key: fs.readFileSync(
-//     "/home/ec2-user/ssl/rajsareesenterprises.com/privkey1.pem"
-//   ),
-//   cert: fs.readFileSync(
-//     "/home/ec2-user/ssl/rajsareesenterprises.com/fullchain1.pem"
-//   ),
-// };
+const options = {
+  key: fs.readFileSync(
+    "/home/ec2-user/ssl/rajsareesenterprises.com/privkey1.pem"
+  ),
+  cert: fs.readFileSync(
+    "/home/ec2-user/ssl/rajsareesenterprises.com/fullchain1.pem"
+  ),
+};
 
-// const httpsServer = https.createServer(options, app);
+const httpsServer = https.createServer(options, app);
 
 app.get("/", (req, res) => {
   res.send("Hello world");
@@ -39,6 +39,6 @@ app.use("/api/order", order);
 app.use("/api/product", product);
 app.use("/api/category", category);
 
-app.listen(port, () => {
+httpsServer.listen(port, () => {
   console.log(`App is listening on port ${process.env.PORT}`);
 });
