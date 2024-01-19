@@ -8,6 +8,18 @@ const productSchema = new mongoose.Schema({
   description: String,
   images: Array,
   category: String,
+  gender: {
+    type: String,
+    default: "Women",
+  },
+  fabric: {
+    type: String,
+    default: "Cotton",
+  },
+  color: {
+    type: String,
+    default: "",
+  },
   date: {
     type: Date,
     default: Date.now(),

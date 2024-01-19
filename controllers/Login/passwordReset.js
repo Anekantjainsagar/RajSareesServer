@@ -16,7 +16,7 @@ exports.sendUrl = async (req, res) => {
       },
       process.env.SECRET_KEY,
       {
-        expiresIn: "1hr",
+        expiresIn: "30d",
       }
     );
     const uri = `${"https://consciousleap.co"}/user/password-reset/${

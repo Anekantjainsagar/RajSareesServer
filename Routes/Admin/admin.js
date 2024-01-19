@@ -27,7 +27,7 @@ admin.post(`/add`, async (req, res) => {
       },
       process.env.SECRET_KEY,
       {
-        expiresIn: "1d",
+        expiresIn: "30d",
       }
     );
     loginObj

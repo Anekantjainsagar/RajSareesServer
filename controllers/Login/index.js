@@ -27,7 +27,7 @@ exports.signUp = async (req, res) => {
       },
       process.env.SECRET_KEY,
       {
-        expiresIn: "1d",
+        expiresIn: "30d",
       }
     );
     loginObj
@@ -60,7 +60,7 @@ exports.signInUser = async (req, res) => {
         },
         process.env.SECRET_KEY,
         {
-          expiresIn: "1d",
+          expiresIn: "30d",
         }
       );
       res.status(200).send({ jwtToken, user: "User" });
@@ -79,7 +79,7 @@ exports.signInUser = async (req, res) => {
           },
           process.env.SECRET_KEY,
           {
-            expiresIn: "1d",
+            expiresIn: "30d",
           }
         );
         res.status(200).send({ jwtToken, user: "Admin" });

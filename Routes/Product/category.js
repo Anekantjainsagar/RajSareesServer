@@ -1,5 +1,6 @@
 const category = require("express").Router();
 const Category = require("../../model/categorySchema");
+const Product = require("../../model/productSchema");
 
 category.get("/get-all", async (req, res) => {
   try {
@@ -60,6 +61,35 @@ category.post("/update/:id", async (req, res) => {
     { title, image, desc }
   );
   res.send(response);
+});
+
+category.get("/get-sub-category", async (req, res) => {
+  let fabric = [];
+  let color = [];
+  let gender = [];
+
+  const data = await Product.find();
+  data.map((e) => {
+    if (e?.fabric) {
+      fabric.push(e?.fabric.toLowerCase());
+    }
+    if (e?.gender) {
+      gender.push(e?.gender.toLowerCase());
+    }
+    if (e?.color) {
+      color.push(e?.color.toLowerCase());
+    }
+  });
+
+  fabric = [...new Set(fabric)];
+  gender = [...new Set(gender)];
+  color = [...new Set(color)];
+
+  fabric = fabric.map((e) => e?.charAt(0).toUpperCase() + e?.slice(1));
+  color = color.map((e) => e?.charAt(0).toUpperCase() + e?.slice(1));
+  gender = gender.map((e) => e?.charAt(0).toUpperCase() + e?.slice(1));
+
+  res.json({ fabric, gender, color });
 });
 
 module.exports = category;

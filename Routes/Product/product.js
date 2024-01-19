@@ -7,12 +7,27 @@ const { validateSingin } = require("../../middlewares/auth");
 
 product.get("/get-all", async (req, res) => {
   try {
-    const { categoryIds } = req.query;
+    const { categoryIds, color, gender, fabric } = req.query;
 
     let filter = {};
     if (categoryIds) {
       const categoryIdArray = categoryIds.split(",");
-      filter = { category_id: { $in: categoryIdArray } };
+      filter.category_id = { $in: categoryIdArray };
+    }
+
+    if (fabric) {
+      const categoryIdArray = fabric.split(",");
+      filter.fabric = { $in: categoryIdArray };
+    }
+
+    if (gender) {
+      const categoryIdArray = gender.split(",");
+      filter.gender = { $in: categoryIdArray };
+    }
+
+    if (color) {
+      const categoryIdArray = color.split(",");
+      filter.color = { $in: categoryIdArray };
     }
 
     const result = await Product.find(filter).populate("category_id");
@@ -25,10 +40,22 @@ product.get("/get-all", async (req, res) => {
 
 product.post("/add", async (req, res) => {
   try {
-    let { category_id, name, price, discountPrice, description, images } =
-      req.body;
+    let {
+      category_id,
+      name,
+      price,
+      discountPrice,
+      description,
+      images,
+      gender,
+      fabric,
+      color,
+    } = req.body;
     price = parseInt(price);
     discountPrice = parseInt(discountPrice);
+    gender = gender.toLowerCase();
+    fabric = fabric.toLowerCase();
+    color = color.toLowerCase();
 
     const product = Product({
       category_id,
@@ -37,6 +64,9 @@ product.post("/add", async (req, res) => {
       discountPrice,
       description,
       images,
+      gender,
+      fabric,
+      color,
     });
     product
       .save()
@@ -52,16 +82,38 @@ product.post("/add", async (req, res) => {
 });
 
 product.post("/update/:id", async (req, res) => {
-  let { category_id, name, price, discountPrice, description, images } =
-    req.body;
+  let {
+    category_id,
+    name,
+    price,
+    discountPrice,
+    description,
+    images,
+    gender,
+    fabric,
+    color,
+  } = req.body;
   price = parseInt(price);
   discountPrice = parseInt(discountPrice);
+  gender = gender.toLowerCase();
+  fabric = fabric.toLowerCase();
+  color = color.toLowerCase();
 
   const { id } = req.params;
 
   const response = await Product.updateOne(
     { _id: id },
-    { category_id, name, price, discountPrice, description, images }
+    {
+      category_id,
+      name,
+      price,
+      discountPrice,
+      description,
+      images,
+      gender,
+      fabric,
+      color,
+    }
   );
   res.send(response);
 });
