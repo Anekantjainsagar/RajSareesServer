@@ -35,8 +35,8 @@ order.post("/place", async (req, res) => {
               customer_phone: user?.phone.toString(),
             },
             order_meta: {
-              return_url: `https://rajsareesenterprises.com/pay/{order_id}`,
-              // return_url: `http://localhost:3000/pay/{order_id}`,
+              // return_url: `https://rajsareesenterprises.com/pay/{order_id}`,
+              return_url: `http://localhost:3000/pay/{order_id}`,
             },
           },
           {
@@ -118,6 +118,59 @@ order.get("/get/:id", async (req, res) => {
   } catch (error) {
     res.status(500).send(error);
   }
+});
+
+order.get("/get-order-report", async (req, res) => {
+  const orders = await Order.find();
+  let report = {
+    day: 0,
+    week: 0,
+    month: 0,
+    fail: 0,
+  };
+
+  orders.map((e) => {
+    if (
+      new Date(e.date).toString().slice(0, 16) ===
+      new Date().toString().slice(0, 16)
+    ) {
+      report.day++;
+    }
+    if (e.date > Date.now() - 7 * 24 * 60 * 60 * 1000) {
+      report.week++;
+    }
+    var d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    if (new Date(e.date).getMonth() >= d.getMonth()) {
+      report.month++;
+    }
+    if (e?.status != "NewOrder") {
+      report.fail++;
+    }
+  });
+  res.status(200).send(report);
+});
+
+order.get("/get-users-report", async (req, res) => {
+  const users = await Login.find();
+  let report = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  users.map((e) => {
+    report[new Date(e.date).getMonth()]++;
+  });
+
+  res.status(200).send(report);
+});
+
+order.get("/get-revenue", async (req, res) => {
+  const payment = await Payments.find();
+  let report = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  let total = 0;
+  payment.map((e) => {
+    report[new Date(e.date).getMonth()] += e.amount;
+    total += e.amount;
+  });
+  res.status(200).send({ report, total });
 });
 
 module.exports = order;
