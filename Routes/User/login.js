@@ -1,5 +1,8 @@
 const express = require("express");
 const login = express.Router();
+const mongoose = require("mongoose");
+
+const Order = require("../../model/orderSchema");
 
 // Controllers
 const {
@@ -32,6 +35,25 @@ login.post("/update-user", validateSingin, updateUser);
 
 login.post("/signup", validateSignUp, userValidationResult, signUp);
 login.post("/signin", signInUser);
+
+login.post("/get-orders", validateSingin, async (req, res) => {
+  const { id } = req;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid user ID");
+  }
+
+  try {
+    const result = await Order.find({
+      user_id: id,
+      status: "NewOrder",
+    }).populate("user_id payment_id");
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 // Password reset
 // login.post("/password-reset", sendUrl);

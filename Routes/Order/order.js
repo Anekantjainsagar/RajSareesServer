@@ -36,7 +36,7 @@ order.post("/place", async (req, res) => {
             },
             order_meta: {
               // return_url: `https://rajsareesenterprises.com/pay/{order_id}`,
-              return_url: `https://rajenterprises.com/pay/{order_id}`,
+              return_url: `http://localhost:3000/pay/{order_id}`,
             },
           },
           {
@@ -67,7 +67,8 @@ order.post("/payment", async (req, res) => {
     res.status(201).send("Invalid uri");
   } else {
     try {
-      await fetch(`https://api.cashfree.com/pg/orders/${order_id}`, {
+      // await fetch(`https://api.cashfree.com/pg/orders/${order_id}`, {
+      await fetch(`https://sandbox.cashfree.com/pg/orders/${order_id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +79,6 @@ order.post("/payment", async (req, res) => {
       })
         .then((res) => res.json())
         .then((response) => {
-          console.log(response);
           if (response?.order_status === "PAID") {
             const payment = new Payments({
               amount: amount,
@@ -90,7 +90,7 @@ order.post("/payment", async (req, res) => {
               .then(async (response) => {
                 const update = await Order.updateOne(
                   { _id: order_id },
-                  { status: "NewOrder", payment_id: pay?._id }
+                  { status: "NewOrder", payment_id: payment?._id }
                 );
                 res.status(200).send("This order is paid!");
               })

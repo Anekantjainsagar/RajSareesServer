@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require("../../model/adminSchema");
 const Login = require("../../model/loginSchema");
+const Order = require("../../model/orderSchema");
 
 admin.post(`/add`, async (req, res) => {
   let { email, password } = req.body;
@@ -47,6 +48,11 @@ admin.post(`/add`, async (req, res) => {
 admin.get("/get-users", async (req, res) => {
   const data = await Login.find();
   res.send(data);
+});
+
+admin.get("/get-all-orders", async (req, res) => {
+  const response = await Order.find().populate("user_id payment_id");
+  res.send(response);
 });
 
 module.exports = admin;
