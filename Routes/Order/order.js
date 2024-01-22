@@ -35,8 +35,8 @@ order.post("/place", async (req, res) => {
               customer_phone: user?.phone.toString(),
             },
             order_meta: {
-              // return_url: `https://rajsareesenterprises.com/pay/{order_id}`,
-              return_url: `http://localhost:3000/pay/{order_id}`,
+              return_url: `https://rajsareesenterprises.com/pay/{order_id}`,
+              // return_url: `http://localhost:3000/pay/{order_id}`,
             },
           },
           {
