@@ -35,8 +35,8 @@ order.post("/place", async (req, res) => {
               customer_phone: user?.phone.toString(),
             },
             order_meta: {
-              // return_url: `https://rajsareesenterprises.com/pay/{order_id}`,
-              return_url: `http://localhost:3000/pay/{order_id}`,
+              return_url: `https://rajsareesenterprises.com/pay/{order_id}`,
+              // return_url: `http://localhost:3000/pay/{order_id}`,
             },
           },
           {
@@ -139,9 +139,7 @@ order.get("/get-order-report", async (req, res) => {
     if (e.date > Date.now() - 7 * 24 * 60 * 60 * 1000) {
       report.week++;
     }
-    var d = new Date();
-    d.setMonth(d.getMonth() - 1);
-    if (new Date(e.date).getMonth() >= d.getMonth()) {
+    if (new Date(e.date).getMonth() >= new Date().getMonth()) {
       report.month++;
     }
     if (e?.status != "NewOrder") {
