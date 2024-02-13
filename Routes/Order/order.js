@@ -7,8 +7,8 @@ const Login = require("../../model/loginSchema");
 const sdk = require("api")("@cashfreedocs-new/v3#3oi9ke2mljzm0bo0");
 
 order.post("/place", async (req, res) => {
-  //   sdk.server("https://api.cashfree.com/pg");
-  sdk.server("https://sandbox.cashfree.com/pg");
+  sdk.server("https://api.cashfree.com/pg");
+  // sdk.server("https://sandbox.cashfree.com/pg");
 
   let { user_id, products, amount } = req.body;
 
@@ -67,8 +67,8 @@ order.post("/payment", async (req, res) => {
     res.status(201).send("Invalid uri");
   } else {
     try {
-      // await fetch(`https://api.cashfree.com/pg/orders/${order_id}`, {
-      await fetch(`https://sandbox.cashfree.com/pg/orders/${order_id}`, {
+      await fetch(`https://api.cashfree.com/pg/orders/${order_id}`, {
+        // await fetch(`https://sandbox.cashfree.com/pg/orders/${order_id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
