@@ -10,12 +10,17 @@ const category = require("./Routes/Product/category");
 const admin = require("./Routes/Admin/admin");
 const order = require("./Routes/Order/order");
 
+const http = require("http");
 const https = require("https");
-const fs = require("fs");
 
-connect();
-app.use(cors());
+const corsOptions = {
+  origin: "https://raj-sarees.vercel.app", // your frontend URL
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+connect();
 
 const port = process.env.PORT || 5000;
 // const options = {
@@ -28,7 +33,7 @@ const port = process.env.PORT || 5000;
 // };
 
 // const httpsServer = https.createServer(options, app);
-const httpServer = https.createServer(app);
+const httpServer = http.createServer(app);
 
 app.get("/", (req, res) => {
   res.send("Hello world");
